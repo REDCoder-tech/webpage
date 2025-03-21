@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration Form</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 500px;
+        }
+
+        h1 {
+            color: #1a73e8;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #333;
+            font-weight: 500;
+        }
+
+        input {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #1a73e8;
+            box-shadow: 0 0 0 2px rgba(26, 115, 232, 0.2);
+        }
+
+        button {
+            width: 100%;
+            padding: 1rem;
+            background: #1a73e8;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        button:hover {
+            background: #1557b0;
+        }
+
+        .error {
+            color: #dc3545;
+            font-size: 0.9rem;
+            margin-top: 0.3rem;
+            display: none;
+        }
+
+        .success-message {
+            color: #28a745;
+            text-align: center;
+            margin-top: 1rem;
+            display: none;
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                margin: 1rem;
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Create Account</h1>
+        <form id="registrationForm">
+            <div class="form-group">
+                <label for="fullname">Full Name</label>
+                <input type="text" id="fullname" required>
+                <div class="error" id="nameError">Please enter a valid name</div>
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" required>
+                <div class="error" id="emailError">Please enter a valid email address</div>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" required>
+                <div class="error" id="passwordError">Password must be at least 8 characters</div>
+            </div>
+
+            <div class="form-group">
+                <label for="confirmPassword">Confirm Password</label>
+                <input type="password" id="confirmPassword" required>
+                <div class="error" id="confirmError">Passwords do not match</div>
+            </div>
+
+            <button type="submit">Register Now</button>
+        </form>
+        <div class="success-message" id="successMessage">
+            Registration successful! Redirecting...
+        </div>
+    </div>
+
+    <script>
+        const form = document.getElementById('registrationForm');
+        const successMessage = document.getElementById('successMessage');
+
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            let isValid = true;
+
+            // Clear previous errors
+            document.querySelectorAll('.error').forEach(error => error.style.display = 'none');
+
+            // Name validation
+            const name = document.getElementById('fullname').value;
+            if (name.trim() === '' || name.length < 3) {
+                document.getElementById('nameError').style.display = 'block';
+                isValid = false;
+            }
+
+            // Email validation
+            const email = document.getElementById('email').value;
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                document.getElementById('emailError').style.display = 'block';
+                isValid = false;
+            }
+
+            // Password validation
+            const password = document.getElementById('password').value;
+            if (password.length < 8) {
+                document.getElementById('passwordError').style.display = 'block';
+                isValid = false;
+            }
+
+            // Confirm password validation
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            if (password !== confirmPassword) {
+                document.getElementById('confirmError').style.display = 'block';
+                isValid = false;
+            }
+
+            if (isValid) {
+                form.style.display = 'none';
+                successMessage.style.display = 'block';
+                
+                // Simulate registration success
+                setTimeout(() => {
+                    window.location.href = 'login.html'; // Redirect to login page
+                }, 2000);
+                
+                // Here you would typically send data to a server
+                console.log('Registration data:', {
+                    name: name,
+                    email: email,
+                    password: password
+                });
+            }
+        });
+
+        // Real-time validation
+        document.getElementById('password').addEventListener('input', function() {
+            if (this.value.length >= 8) {
+                document.getElementById('passwordError').style.display = 'none';
+            }
+        });
+
+        document.getElementById('confirmPassword').addEventListener('input', function() {
+            if (this.value === document.getElementById('password').value) {
+                document.getElementById('confirmError').style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>
